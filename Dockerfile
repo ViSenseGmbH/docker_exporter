@@ -14,6 +14,4 @@ FROM mcr.microsoft.com/dotnet/core/runtime-deps:3.1-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app/out .
 
-EXPOSE 9417
-
 ENTRYPOINT ["./docker_exporter"]
