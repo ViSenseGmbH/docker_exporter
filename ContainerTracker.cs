@@ -115,12 +115,17 @@ namespace DockerExporter
         {
             metrics.RestartCount.Set(container.RestartCount);
 
-            if (container.State.Running)
+            if (container.State.Running) {
                 metrics.RunningState.Set(1);
-            else if (container.State.Restarting)
+                metrics.ExitCode.Set(0);
+            }
+            else if (container.State.Restarting) {
                 metrics.RunningState.Set(0.5);
-            else
+            }
+            else {
                 metrics.RunningState.Set(0);
+                metrics.ExitCode.Set(container.State.ExitCode);
+            }
 
             if (container.State.Running && !string.IsNullOrWhiteSpace(container.State.StartedAt))
                 metrics.StartTime.SetToTimeUtc(DateTimeOffset.Parse(container.State.StartedAt));
